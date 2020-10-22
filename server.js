@@ -1,7 +1,12 @@
-const express = require("express");
-const app = express();
-const PORT = 3000;
+// Dependencies
+// ===========================================================
+var express = require("express");
 
+var app = express();
+var PORT = 3000;
+
+//Required In Information
+//============================================================
 const htmlRoutes = require("./routes/htmlRoutes");
 const apiRoutes = require("./routes/apiRoutes");
 
@@ -13,8 +18,8 @@ app.use(express.static("public"));
 app.use("/api", apiRoutes); 
 app.use("/", htmlRoutes); 
 
-//app.listen(PORT, () => console.log("App, listening on PORT" + PORT));
-
+// Listener
+// ===========================================================
 app.listen(PORT, function() {
-    console.log("App, listening on PORT" + PORT) //express in listening if anyone makes a request of it
+    console.log("App, listening on PORT" + PORT) //express is listening for request
 });
