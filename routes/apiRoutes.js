@@ -10,6 +10,8 @@ const uuidv1 = require("uuid");
   
 //Routes
 // ===========================================================
+
+//browser wants to get information from the server,  telling express to expect to find information
 router.get("/notes", function(req, res) { //retrieving data and pushing it back to client 
 
     fs.readFile("db/db.json", function(err, data) { //reading the db.json file
@@ -28,6 +30,7 @@ router.get("/notes", function(req, res) { //retrieving data and pushing it back 
        
 });
 
+//browser wants to post to the server, telling express to expect to recieve information
 router.post("/notes", function(req, res) {
  
     var existingNotes = [];
@@ -64,7 +67,7 @@ router.post("/notes", function(req, res) {
 
 router.delete("/notes", function(req, res) {
 
-    var id = parseInt(req.query.id)
+    var id = parseInt(req.query.id)  //req.params.id  vs req.
     console.log(id);
     var existingNotes = [];
 
