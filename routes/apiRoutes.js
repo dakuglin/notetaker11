@@ -1,46 +1,84 @@
 //Required In Information
 //============================================================
 var router = require('express').Router();
+const e = require('express');
 var fs = require("fs");
-var updatedNotes = [];
+const uuidv1 = require("uuid");
+
+  
+//const { delete } = require('./htmlRoutes');
+
 
 // Routes
 // ===========================================================
-router.get("/notes", function(req, res) {
+router.get("/notes", function(req, res) { //retrieving data and pushing it back to client 
 
-    fs.readFile("../db/db.json", function(err, data) {
+    fs.readFile("db/db.json", function(err, data) {
+        // console.log(data)
 
-        if(err) {
-            console.log("error!");
+        var updatedNotes = [];
+
+        if (err) {
+
+            console.error(err)
         }
-        var note = JSON.parse(data) || [];
-        console.log(note);
+        updatedNotes = JSON.parse(data) || [];
+        console.log(updatedNotes);
 
-        note.push(updatedNotes)
-
-        //let notesArr = [...notesArr, updatedNotes]
+        // note.push(updatedNotes)
+        res.send(updatedNotes);
+        
     })
-    
-    // var note = JSON.parse("test.json") || [];
-    //  console.log(note)
-    // // note.push(updatedNotes)
-    // .then((notesArr) =>[...notesArr, updatedNotes])
-    // .then(updatedNotes => fs.wirtefile((updatedNotes)))
-    // console.log(updatedNotes)
-    
+       
 });
 
 router.post("/notes", function(req, res) {
+    //console.log(req.body)
+    var existingNotes = [];
+    const note = req.body
+    fs.readFile("db/db.json", function(err, data) {
+        // console.log(data)
+        if (err) {
 
-    fs.writeFile("../db/db.json", JSON.stringify(updatedNotes), function(err) {
+            console.error(err)
+        }
+        existingNotes = JSON.parse(data) || [];
+
+        console.log(`existing=${JSON.stringify(existingNotes)}`);
+        note.id = uuidv1()
+        // Math.floor(Math.random() * 1000) + 1 //getting a random id index
+        console.log(note)
+        existingNotes.push(note)
+        console.log(`updated=${existingNotes}`)
+
+        fs.writeFile("db/db.json", JSON.stringify(existingNotes), function(err) {
 
         if(err) {
-            console.log("error!");
+            // console.log("error!");
+            console.error(err)
         }
 
-        //     //let notesArr = [...notesArr, updatedNotes]
+        
+        })
+        res.send(existingNotes)
+       
     })
 
+   
+   
+   
+
+    // fs.writeFile("db/db.json", JSON.stringify(existingNotes), function(err) {
+
+    //     if(err) {
+    //         // console.log("error!");
+    //         console.error(err)
+    //     }
+
+    //     //     //let notesArr = [...notesArr, updatedNotes]
+    // })
+
+ 
     // router.post("/notes", function(req, res) {
     //     //json.stringify
     //     console.log(req.body);
@@ -48,6 +86,53 @@ router.post("/notes", function(req, res) {
     //     .then(() => updatedNotes)
 });
 
+
+router.delete("/notes", function(req, res) {
+    //console.log(req.body)
+    var id = parseInt(req.query.id)
+    console.log(id);
+    var existingNotes = [];
+    // const note = req.body
+    fs.readFile("db/db.json", function(err, data) {
+        // console.log(data)
+        if (err) {
+
+            console.error(err)
+        }
+        existingNotes = JSON.parse(data) || [];
+
+        console.log(`existing=${JSON.stringify(existingNotes)}`);
+
+        var filteredNotes = [];
+        // for (var i=0; i<existingNotes.length; i++)
+        for (const i in existingNotes){
+            console.log(i) 
+            console.log(existingNotes[i])
+            var element = existingNotes[i];
+
+            if(element.id !== id) {
+                filteredNotes.push(element)
+            }
+        }
+        // var filteredNotes = existingNotes.filter((e) => {e.id !== id}) 
+        console.log(filteredNotes)
+        
+        //existingNotes.push(note)
+        
+        fs.writeFile("db/db.json", JSON.stringify(filteredNotes), function(err) {
+
+        if(err) {
+            // console.log("error!");
+            console.error(err)
+        }
+
+        
+        })
+        res.send(filteredNotes)
+       
+    })
+
+});
 // router.get("/api", (req, res) => {
 //     var notes = JSON.parse("db.json") //|| [];
 //     console.log(notes);
