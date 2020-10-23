@@ -46,7 +46,7 @@ router.post("/notes", function(req, res) {
         existingNotes = JSON.parse(data) || []; //converting JSON string into JS object
         console.log(`existing=${JSON.stringify(existingNotes)}`); //taking JS object and turning it back into JSON string
         //note.id = uuidv1()
-        note.id = Math.floor(Math.random() * 1000) + 1 //andom id index being assigned it to  
+        note.id = Math.floor(Math.random() * 30000) + 1 //andom id index being assigned it to  
         console.log(note)
         existingNotes.push(note) //pushing our test from postman to our existingNotes array
         console.log(`updatedNotes=${existingNotes}`)
@@ -65,9 +65,9 @@ router.post("/notes", function(req, res) {
 
 });
 
-router.delete("/notes", function(req, res) {
+router.delete("/notes:id", function(req, res) {
 
-    var id = parseInt(req.query.id)  //req.params.id  vs req.
+    var id = parseInt(req.params.id)  //req.params.id  vs req.query.id
     console.log(id);
     var existingNotes = [];
 
@@ -85,13 +85,13 @@ router.delete("/notes", function(req, res) {
             console.log(existingNotes[i])
             var element = existingNotes[i];
 
-            if(element.id !== id) {
+            if(element.id === id) {
                 filteredNotes.push(element) //pushing elements that are not equal to the elements being deleted to the filtered array
             }
         }
 
-        // var filteredNotes = existingNotes.filter((e) => {e.id !== id}) 
-        console.log(filteredNotes)
+        // var filteredNotes = existingNotes.filter((idToDelete) => {idToDelete.id !== id}) 
+        // console.log(filteredNotes)
         
         fs.writeFile("db/db.json", JSON.stringify(filteredNotes), function(err) { //writing fitered     notes to  JSON file
 
