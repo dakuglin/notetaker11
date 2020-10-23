@@ -13,7 +13,7 @@ const apiRoutes = require("./routes/apiRoutes");
 //always need, sets up the Express app to handle data parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-//app.use(express.static("public"));
+app.use(express.static("public"));
 
 app.use("/api", apiRoutes); 
 app.use("/", htmlRoutes); 
@@ -21,6 +21,6 @@ app.use("/", htmlRoutes);
 // Listener
 // ===========================================================
 app.listen(PORT, function() {
-    console.log("App, listening on PORT" + PORT) //express is listening for request
+    console.log("App, listening on PORT " + PORT) //express is listening for request
 });
 

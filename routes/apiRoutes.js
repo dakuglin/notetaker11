@@ -1,184 +1,106 @@
 //Required In Information
 //============================================================
 var router = require('express').Router();
-const e = require('express');
 var fs = require("fs");
+const util = require("util");
+// const readFileAsync = util.promisify(fs.readFile)
+// const writeFileAsync = util.promisify(fs.writeFile)
 const uuidv1 = require("uuid");
 
   
-//const { delete } = require('./htmlRoutes');
-
-
-// Routes
+//Routes
 // ===========================================================
 router.get("/notes", function(req, res) { //retrieving data and pushing it back to client 
 
-    fs.readFile("db/db.json", function(err, data) {
-        // console.log(data)
-
-        var updatedNotes = [];
+    fs.readFile("db/db.json", function(err, data) { //reading the db.json file
+        
+        var updatedNotes = []; //empty array to store notes after being read
 
         if (err) {
-
-            console.error(err)
+            console.log(err);
         }
-        updatedNotes = JSON.parse(data) || [];
-        console.log(updatedNotes);
 
-        // note.push(updatedNotes)
-        res.send(updatedNotes);
+        updatedNotes = JSON.parse(data) || []; //converting JSON string into JS object
+        console.log(updatedNotes);
+        res.send(updatedNotes); //seding the parsed JS object back to undatedNotes array
         
-    })
+    });
        
 });
 
 router.post("/notes", function(req, res) {
-    //console.log(req.body)
+ 
     var existingNotes = [];
-    const note = req.body
+    const note = req.body; //this is the resposne from postman for testing 
+
+
     fs.readFile("db/db.json", function(err, data) {
-        // console.log(data)
+      
         if (err) {
-
             console.error(err)
         }
-        existingNotes = JSON.parse(data) || [];
 
-        console.log(`existing=${JSON.stringify(existingNotes)}`);
-        note.id = uuidv1()
-        // Math.floor(Math.random() * 1000) + 1 //getting a random id index
+        existingNotes = JSON.parse(data) || []; //converting JSON string into JS object
+        console.log(`existing=${JSON.stringify(existingNotes)}`); //taking JS object and turning it back into JSON string
+        //note.id = uuidv1()
+        note.id = Math.floor(Math.random() * 1000) + 1 //andom id index being assigned it to  
         console.log(note)
-        existingNotes.push(note)
-        console.log(`updated=${existingNotes}`)
+        existingNotes.push(note) //pushing our test from postman to our existingNotes array
+        console.log(`updatedNotes=${existingNotes}`)
 
-        fs.writeFile("db/db.json", JSON.stringify(existingNotes), function(err) {
+        fs.writeFile("db/db.json", JSON.stringify(existingNotes), function(err) { //writing to JSON file
 
-        if(err) {
-            // console.log("error!");
-            console.error(err)
-        }
-
+            if(err) {
+                console.log("error!");
+            }
         
         })
-        res.send(existingNotes)
+
+        res.send(existingNotes) //pushing the JSON string back to existingNotes array
        
     })
 
-   
-   
-   
-
-    // fs.writeFile("db/db.json", JSON.stringify(existingNotes), function(err) {
-
-    //     if(err) {
-    //         // console.log("error!");
-    //         console.error(err)
-    //     }
-
-    //     //     //let notesArr = [...notesArr, updatedNotes]
-    // })
-
- 
-    // router.post("/notes", function(req, res) {
-    //     //json.stringify
-    //     console.log(req.body);
-    //     var note = JSON.stringify(userInput)
-    //     .then(() => updatedNotes)
 });
 
-
 router.delete("/notes", function(req, res) {
-    //console.log(req.body)
+
     var id = parseInt(req.query.id)
     console.log(id);
     var existingNotes = [];
-    // const note = req.body
-    fs.readFile("db/db.json", function(err, data) {
-        // console.log(data)
-        if (err) {
 
+    fs.readFile("db/db.json", function(err, data) {
+       
+        if (err) {
             console.error(err)
         }
+
         existingNotes = JSON.parse(data) || [];
+        console.log(`existingNotes=${JSON.stringify(existingNotes)}`);
+        var filteredNotes = []; //array of filtered notes with deleted elements removed
 
-        console.log(`existing=${JSON.stringify(existingNotes)}`);
-
-        var filteredNotes = [];
-        // for (var i=0; i<existingNotes.length; i++)
-        for (const i in existingNotes){
-            console.log(i) 
+        for (var i=0; i < existingNotes.length; i++) {
             console.log(existingNotes[i])
             var element = existingNotes[i];
 
             if(element.id !== id) {
-                filteredNotes.push(element)
+                filteredNotes.push(element) //pushing elements that are not equal to the elements being deleted to the filtered array
             }
         }
+
         // var filteredNotes = existingNotes.filter((e) => {e.id !== id}) 
         console.log(filteredNotes)
         
-        //existingNotes.push(note)
-        
-        fs.writeFile("db/db.json", JSON.stringify(filteredNotes), function(err) {
+        fs.writeFile("db/db.json", JSON.stringify(filteredNotes), function(err) { //writing fitered     notes to  JSON file
 
-        if(err) {
-            // console.log("error!");
-            console.error(err)
-        }
-
-        
+            if(err) {
+                console.log("error!");   
+            }
         })
-        res.send(filteredNotes)
-       
+
+        res.send(filteredNotes) //pushing the JSON string back to fiteredNotes array
+
     })
 
 });
-// router.get("/api", (req, res) => {
-//     var notes = JSON.parse("db.json") //|| [];
-//     console.log(notes);
-
-//     // notes.push(updatedNotes)
-
-//     // .then((notesArr) =>[...notesArr, updatedNotes])
-//     // .then(updatedNotes => fs.wirtefile((updatedNotes)))
-
-// })
-
-
-
-
-
-
-// router.post("/notes", (req, res) => {
-// //     store 
-// //     //function 
-// //     //before stringify I need to parse 
-// //     //JSON.stringify()
-
-// //     //where I push the file and 
-
-// })
-
-// router.delete("/notes:id", (req, res) => {
-//     store 
-
-// })
 
  module.exports = router;
-
-
-
-
-
-
-
-// router.get("/notes",(req,res) => {
-
-//     //get read file 
-//     //put function here
-//     // JSON.parse()
-//     store
-//         .getNotes() //route to read from the file
-//         .then(notes) 
-    
-// })
