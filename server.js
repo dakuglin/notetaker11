@@ -10,10 +10,10 @@ var PORT = 3000;
 const htmlRoutes = require("./routes/htmlRoutes");
 const apiRoutes = require("./routes/apiRoutes");
 
-//always needs to be in your server
+//always need, sets up the Express app to handle data parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+//app.use(express.static("public"));
 
 app.use("/api", apiRoutes); 
 app.use("/", htmlRoutes); 
@@ -23,3 +23,4 @@ app.use("/", htmlRoutes);
 app.listen(PORT, function() {
     console.log("App, listening on PORT" + PORT) //express is listening for request
 });
+

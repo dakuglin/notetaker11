@@ -1,25 +1,76 @@
-const router = require("express").Router;
-const store = require("../db/store");
+//Required In Information
+//============================================================
+var router = require('express').Router();
+var fs = require("fs");
+var updatedNotes = [];
 
+// Routes
+// ===========================================================
+router.get("/notes", function(req, res) {
 
-router.get("/api", (req, res) => {
-    var notes = JSON.parse("../db.json") || [];
-    console.log(notes);
+    fs.readFile("../db/db.json", function(err, data) {
 
-    // notes.push(newNote)
+        if(err) {
+            console.log("error!");
+        }
+        var note = JSON.parse(data) || [];
+        console.log(note);
 
-    // .then((notesArr) =>[...notesArr, newNote])
+        note.push(updatedNotes)
+
+        //let notesArr = [...notesArr, updatedNotes]
+    })
+    
+    // var note = JSON.parse("test.json") || [];
+    //  console.log(note)
+    // // note.push(updatedNotes)
+    // .then((notesArr) =>[...notesArr, updatedNotes])
     // .then(updatedNotes => fs.wirtefile((updatedNotes)))
+    // console.log(updatedNotes)
+    
+});
 
-})
+router.post("/notes", function(req, res) {
+
+    fs.writeFile("../db/db.json", JSON.stringify(updatedNotes), function(err) {
+
+        if(err) {
+            console.log("error!");
+        }
+
+        //     //let notesArr = [...notesArr, updatedNotes]
+    })
+
+    // router.post("/notes", function(req, res) {
+    //     //json.stringify
+    //     console.log(req.body);
+    //     var note = JSON.stringify(userInput)
+    //     .then(() => updatedNotes)
+});
+
+// router.get("/api", (req, res) => {
+//     var notes = JSON.parse("db.json") //|| [];
+//     console.log(notes);
+
+//     // notes.push(updatedNotes)
+
+//     // .then((notesArr) =>[...notesArr, updatedNotes])
+//     // .then(updatedNotes => fs.wirtefile((updatedNotes)))
+
+// })
+
+
+
+
+
 
 // router.post("/notes", (req, res) => {
-//     store 
-//     //function 
-//     //before stringify I need to parse 
-//     //JSON.stringify()
+// //     store 
+// //     //function 
+// //     //before stringify I need to parse 
+// //     //JSON.stringify()
 
-//     //where I push the file and 
+// //     //where I push the file and 
 
 // })
 
@@ -28,8 +79,8 @@ router.get("/api", (req, res) => {
 
 // })
 
+ module.exports = router;
 
-// modeule.exports = router;
 
 
 
