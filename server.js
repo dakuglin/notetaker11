@@ -8,7 +8,7 @@ var PORT = process.env.PORT || 3000;
 //Required In Information
 //============================================================
 const htmlRoutes = require("./routes/htmlRoutes");
-const apiRoutes = require("./routes/apiRoutes2");
+const apiRoutes = require("./routes/apiRoutes");
 
 //always need, sets up the Express app to handle data parsing
 app.use(express.json());

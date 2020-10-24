@@ -2,9 +2,7 @@
 //============================================================
 var router = require('express').Router();
 var fs = require("fs");
-const util = require("util");
-// const readFileAsync = util.promisify(fs.readFile)
-// const writeFileAsync = util.promisify(fs.writeFile)
+//const util = require("util");
 const uuidv1 = require("uuid");
 
   
@@ -65,10 +63,10 @@ router.post("/notes", function(req, res) {
 
 });
 
-router.delete("/notes:id", function(req, res) {
+router.delete("/notes/:id", function(req, res) {
 
     var id = parseInt(req.params.id)  //req.params.id  vs req.query.id
-    console.log(id);
+    console.log(id); //the id of the element we want to delete
     var existingNotes = [];
 
     fs.readFile("db/db.json", function(err, data) {
@@ -85,13 +83,10 @@ router.delete("/notes:id", function(req, res) {
             console.log(existingNotes[i])
             var element = existingNotes[i];
 
-            if(element.id === id) {
+            if(element.id !== id) {
                 filteredNotes.push(element) //pushing elements that are not equal to the elements being deleted to the filtered array
             }
         }
-
-        // var filteredNotes = existingNotes.filter((idToDelete) => {idToDelete.id !== id}) 
-        // console.log(filteredNotes)
         
         fs.writeFile("db/db.json", JSON.stringify(filteredNotes), function(err) { //writing fitered     notes to  JSON file
 
